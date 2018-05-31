@@ -1,0 +1,81 @@
+﻿  boss.cpp
+boss.cpp(182): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
+boss.cpp(172): warning C4101: 'fDiffRotY': ローカル変数は 1 度も使われていません。
+  bossbullet.cpp
+bossbullet.cpp(120): warning C4101: 'checkdistance': ローカル変数は 1 度も使われていません。
+bossbullet.cpp(119): warning C4101: 'bossbullethit': ローカル変数は 1 度も使われていません。
+bossbullet.cpp(118): warning C4101: 'rotsetBossBtoP': ローカル変数は 1 度も使われていません。
+  bosslife.cpp
+  bulletmk2.cpp
+  camera.cpp
+camera.cpp(113): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
+camera.cpp(115): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
+  debugproc.cpp
+  enemy.cpp
+enemy.cpp(34): warning C4005: 'VALUE_MOVE_ENEMY': マクロが再定義されました。
+  enemy.cpp(18): note: 'VALUE_MOVE_ENEMY' の以前の定義を確認してください
+enemy.cpp(191): warning C4101: 'fDiffRotY': ローカル変数は 1 度も使われていません。
+enemy.cpp(372): warning C4101: 'createno': ローカル変数は 1 度も使われていません。
+  enemycontrol.cpp
+  enemyinfo.cpp
+  enemywave.cpp
+enemywave.cpp(99): warning C4244: '初期化中': 'double' から 'int' への変換です。データが失われる可能性があります。
+  evolve.cpp
+  fade.cpp
+  game.cpp
+c:\users\yamamoto akimasa\desktop\gpgm21あああああ\hit.h(16): warning C4005: 'VALUE_MOVE_MODEL': マクロが再定義されました。
+  c:\users\yamamoto akimasa\desktop\gpgm21あああああ\model.h(35): note: 'VALUE_MOVE_MODEL' の以前の定義を確認してください
+c:\users\yamamoto akimasa\desktop\gpgm21あああああ\bulletmk2.h(15): warning C4005: 'BULLET_MAX': マクロが再定義されました。
+  c:\users\yamamoto akimasa\desktop\gpgm21あああああ\hit.h(15): note: 'BULLET_MAX' の以前の定義を確認してください
+c:\users\yamamoto akimasa\desktop\gpgm21あああああ\model_longcheck.h(49): warning C4091: 'typedef ': 変数が何も宣言されていないときは、'' の左辺を無視します。
+game.cpp(464): warning C4101: 'bank': ローカル変数は 1 度も使われていません。
+game.cpp(514): warning C4101: 'bank': ローカル変数は 1 度も使われていません。
+  hit.cpp
+c:\users\yamamoto akimasa\desktop\gpgm21あああああ\model.h(35): warning C4005: 'VALUE_MOVE_MODEL': マクロが再定義されました。
+  c:\users\yamamoto akimasa\desktop\gpgm21あああああ\hit.h(16): note: 'VALUE_MOVE_MODEL' の以前の定義を確認してください
+  hitcheck.cpp
+  input.cpp
+  light.cpp
+  lockcircle.cpp
+lockcircle.cpp(110): warning C4101: 'fDiffRotY': ローカル変数は 1 度も使われていません。
+  main.cpp
+c:\users\yamamoto akimasa\desktop\gpgm21あああああ\model_longcheck.h(49): warning C4091: 'typedef ': 変数が何も宣言されていないときは、'' の左辺を無視します。
+  map.cpp
+map.cpp(134): warning C4101: 'rotcheckBtoM': ローカル変数は 1 度も使われていません。
+map.cpp(132): warning C4101: 'fDiffRotY': ローカル変数は 1 度も使われていません。
+  コンパイル中...
+  meshfield.cpp
+  meshwall.cpp
+  model.cpp
+model.cpp(1033): warning C4101: 'lvkakunou': ローカル変数は 1 度も使われていません。
+  modelarm.cpp
+modelarm.cpp(129): warning C4101: 'fDiffRotY': ローカル変数は 1 度も使われていません。
+  modelbooster.cpp
+modelbooster.cpp(132): warning C4101: 'fDiffRotY': ローカル変数は 1 度も使われていません。
+  modellife.cpp
+  model_longcheck.cpp
+c:\users\yamamoto akimasa\desktop\gpgm21あああああ\model_longcheck.h(49): warning C4091: 'typedef ': 変数が何も宣言されていないときは、'' の左辺を無視します。
+  pause.cpp
+  result.cpp
+  resultscore.cpp
+  score.cpp
+  setting.cpp
+  shadow.cpp
+  shire-.cpp
+  skydoom.cpp
+skydoom.cpp(136): warning C4101: 'rotcheckBtoM': ローカル変数は 1 度も使われていません。
+skydoom.cpp(134): warning C4101: 'fDiffRotY': ローカル変数は 1 度も使われていません。
+  sound.cpp
+  Source.cpp
+  steam.cpp
+  title.cpp
+  titlerogo.cpp
+  コンパイル中...
+  unit.cpp
+  wheel.cpp
+  コード生成しています。
+c:\users\yamamoto akimasa\desktop\gpgm21あああああ\model_longcheck.cpp(92): warning C4715: 'loadmodel': 値を返さないコントロール パスがあります。
+  All 250 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  コード生成が終了しました。
+  OneStickGame.vcxproj -> C:\Users\YAMAMOTO AKIMASA\Desktop\GPGM21あああああ\Release\OneStickGame.exe
+  OneStickGame.vcxproj -> C:\Users\YAMAMOTO AKIMASA\Desktop\GPGM21あああああ\Release\OneStickGame.pdb (Full PDB)
