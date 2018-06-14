@@ -14,7 +14,7 @@
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
-#define	ENEMY_AIRPLANE		"data/MODEL/enemypod.x"	// 読み込むモデル名
+#define	ENEMY_AIRPLANE		"data/MODEL/teacher.x"	// 読み込むモデル名
 #define	VALUE_MOVE_ENEMY	(0.80f)						// 移動速度
 #define	RATE_MOVE_ENEMY		(0.20f)						// 移動慣性係数
 #define	VALUE_ROTATE_ENEMY	(D3DX_PI * 0.05f)			// 回転速度
@@ -34,14 +34,8 @@
 #define VALUE_MOVE_ENEMY		(0.5f)
 #define ENEMYKANKAKUPLUS		(4.0f)// 敵の間隔をこれだけあげる
 
-// 試験管
-#define SHIKENKAN_NINZU			(3)			// 試験管の人数
 
-// 方向転換(指定に使う
-#define	HIDARI	(1.57f)
-#define	MIGI	(-1.57f)
-#define	UE		(0.0f)
-#define	SHITA	(3.57f)
+
 
 
 // 仮置き
@@ -68,8 +62,6 @@ D3DXCOLOR			enemycolShadow;				// 影の色
 D3DXVECTOR3			ENEMYBASEPOS(0.0f, 0.0f, 5.0f);
 ENEMY				enemyWk[ENEMYMAX];					// モデル構造体(モデルは１）
 float				enemyActtime;				// ボスが行動する感覚
-
-
 
 int no = 0;
 //=============================================================================
@@ -127,6 +119,10 @@ HRESULT InitEnemy(void)
 		enemycolShadow = D3DXCOLOR(0.5f, 0.5f, 0.5f, 0.5f);
 		enemyWk[no].use = false;
 		enemyWk[no].acttime = ENEMY_SHOTACT;
+
+		// フラグ初期化
+		enemyWk[no].warning = false;			// 警戒状態
+		enemyWk[no].modechange = false;			// モード変更
 	}
 	return S_OK;
 }
@@ -192,7 +188,7 @@ void UpdateEnemy(void)
 			D3DXVECTOR3 SubposEnemytoModel;
 			float rotcheckEtoM;
 
-
+			// モード変更テスト
 			if (GetKeyboardTrigger(DIK_Z))
 			{
 				if (enemyWk[no].warning == false)
@@ -200,9 +196,11 @@ void UpdateEnemy(void)
 					enemyWk[no].warning = true;
 				}
 
+				// 警戒状態解除
 				else
 				{
 					enemyWk[no].warning = false;
+					enemyWk[no].modechange = true;	// 戻っている途中
 				}
 			}
 
@@ -214,36 +212,44 @@ void UpdateEnemy(void)
 				enemyWk[no].status.rot.y = rotcheckEtoM;	// プレイヤーの方向を向かせる
 			}
 
+
 			enemy_RaypickTomap();
 			move_change();
 
 			// 行動
 			// 動作出来る状態か
-			enemyWk[no].acttime--;		//　デクリメントでいいかも？1フレームで1減らした
 
-			if (enemyWk[no].acttime <= 0.0f)
 
-			// 重複チェック
-			{	// 0なら実行する処理
-				// 弾の発射
-			//	SetEnemybullet(enemyWk[no].status.pos, ENEMYBULLET_1_SIZE_X, ENEMYBULLET_1_SIZE_Y, D3DXCOLOR(1.0f, 0.7f, 0.8f, 0.75f), enemyWk[no].status.rot.y);
-				enemyWk[no].acttime = ENEMYACT;
+			// 移動
+
+			// 戻っている途中でなければ通常移動
+			if (enemyWk[no].modechange == false)
+			{
+				// 移動量の決定
+				enemyWk[no].status.move.x += sinf(D3DX_PI + enemyWk[no].status.rot.y) * VALUE_MOVE_ENEMY;
+				enemyWk[no].status.move.z += cosf(D3DX_PI + enemyWk[no].status.rot.y) * VALUE_MOVE_ENEMY;
+				CheckEnemypos(enemyWk[no].status.pos, no);
+
+				enemyWk[no].status.pos.x += enemyWk[no].status.move.x;
+				enemyWk[no].status.pos.z += enemyWk[no].status.move.z;
+
+				enemyWk[no].status.move.x += (0.0f - enemyWk[no].status.move.x) * RATE_MOVE_MODEL;
+				enemyWk[no].status.move.z += (0.0f - enemyWk[no].status.move.z) * RATE_MOVE_MODEL;
+
 			}
 
+			// 戻っている途中ならAI.cppの関数で移動
+			else
+			{
+				force_move();
+			}
 
-
-			// 向いている方向へ移動する
-
-			// 移動量の決定
-			enemyWk[no].status.move.x += sinf(D3DX_PI + enemyWk[no].status.rot.y) * VALUE_MOVE_ENEMY;
-			enemyWk[no].status.move.z += cosf(D3DX_PI + enemyWk[no].status.rot.y) * VALUE_MOVE_ENEMY;
-			CheckEnemypos(enemyWk[no].status.pos, no);
-
-			enemyWk[no].status.pos.x += enemyWk[no].status.move.x;
-			enemyWk[no].status.pos.z += enemyWk[no].status.move.z;
-
-			enemyWk[no].status.move.x += (0.0f - enemyWk[no].status.move.x) * RATE_MOVE_MODEL;
-			enemyWk[no].status.move.z += (0.0f - enemyWk[no].status.move.z) * RATE_MOVE_MODEL;
+			// 位置の修正
+			// かべにはまらないように
+			if (enemyWk[no].status.pos.x < -125.0f)
+			{
+				enemyWk[no].status.pos.x = -125.0f;
+			}
 
 			
 			// 影の位置設定
@@ -443,14 +449,19 @@ void SetShikenkan(void)
 	//int pos = (rand() % 10);
 	//int pop = (rand() % 4 + 1);
 
-		CreateEnemy(D3DXVECTOR3(-100.0f,0.0f,100.0f));
-		CreateEnemy(D3DXVECTOR3(0.0f,0.0f,100.0f));
-		CreateEnemy(D3DXVECTOR3(100.0f,0.0f,100.0f));
+		CreateEnemy(SHIKENKANPOS1);
+		CreateEnemy(SHIKENKANPOS2);
+		CreateEnemy(SHIKENKANPOS3);
 	
+		// 初期位置設定
+		enemyWk[0].start_pos = SHIKENKANPOS1;
+		enemyWk[1].start_pos = SHIKENKANPOS2;
+		enemyWk[2].start_pos = SHIKENKANPOS3;
+
 		// 試験管の初期向き
-		enemyWk[0].status.rot.y = MIGI;
-		enemyWk[1].status.rot.y = SHITA;
-		enemyWk[2].status.rot.y = UE;
+		enemyWk[0].status.rot.y = SHITA;
+		enemyWk[1].status.rot.y = UE;
+		enemyWk[2].status.rot.y = SHITA;
 }
 
 
@@ -470,23 +481,18 @@ void enemy_RaypickTomap(void)
 	{
 		// 便利関数と引数の説明(自分用)
 		// 下へ飛ばす
-		D3DXIntersect(
-			map->MeshMap,				// 当たり判定を取りたいメッシュ　型はLPD3DXBASEMESH(LPD3DXMESHもOK?)
-			&D3DXVECTOR3(enemyWk[no].status.pos.x, enemyWk[no].status.pos.y + 0.0f, enemyWk[no].status.pos.z),				// レイの視点座標を設定(プレイヤーの座標とかね) 型はD3DXVECTOR3
-			&D3DXVECTOR3(0, -1, 0),		// レイの方向を設定 型はD3DXVECTOR3 XYZ 1で正方向-1で負の方向
-			&enemyWk[no].status.tomapDown,				// 衝突判定 型はBOOL(boolではない) 衝突していたらTRUE当たっていなければFALSE
-			NULL,						// 上記の判定がTRUEの場合レイの視点に最も近い面のインデックス値へのポインタ
-			NULL,						// 重心ヒット座標へのポインタその1レイが当たったメッシュの場所
-			NULL,						// 重心ヒット座標へのポインタその2こちらも同じくメッシュの当たった場所
-			&enemyWk[no].status.D_RtoMdistance,		// レイからメッシュまでの距離はいくつ
-			NULL,						// D3DXINTERSECTINFO構造体の配列を格納するID3DXBufferオブジェクトへのポインタ
-			NULL						// ppAllHits配列内のエントリ数を格納するポインタ、型はDWORD
-		);
-
-
-		// レイピック(モデルから上に飛ばしたレイとマップ)
-		D3DXIntersect(map->MeshMap, &enemyWk[no].status.pos, &D3DXVECTOR3(0, 1, 0), &enemyWk[no].status.tomapUp, NULL, NULL, NULL,
-			&enemyWk[no].status.U_RtoMdistance, NULL, NULL);
+		//D3DXIntersect(
+		//	map->MeshMap,				// 当たり判定を取りたいメッシュ　型はLPD3DXBASEMESH(LPD3DXMESHもOK?)
+		//	&D3DXVECTOR3(enemyWk[no].status.pos.x, enemyWk[no].status.pos.y + 0.0f, enemyWk[no].status.pos.z),				// レイの視点座標を設定(プレイヤーの座標とかね) 型はD3DXVECTOR3
+		//	&D3DXVECTOR3(0, -1, 0),		// レイの方向を設定 型はD3DXVECTOR3 XYZ 1で正方向-1で負の方向
+		//	&enemyWk[no].status.tomapDown,				// 衝突判定 型はBOOL(boolではない) 衝突していたらTRUE当たっていなければFALSE
+		//	NULL,						// 上記の判定がTRUEの場合レイの視点に最も近い面のインデックス値へのポインタ
+		//	NULL,						// 重心ヒット座標へのポインタその1レイが当たったメッシュの場所
+		//	NULL,						// 重心ヒット座標へのポインタその2こちらも同じくメッシュの当たった場所
+		//	&enemyWk[no].status.D_RtoMdistance,		// レイからメッシュまでの距離はいくつ
+		//	NULL,						// D3DXINTERSECTINFO構造体の配列を格納するID3DXBufferオブジェクトへのポインタ
+		//	NULL						// ppAllHits配列内のエントリ数を格納するポインタ、型はDWORD
+		//);
 
 		// レイピック(右に飛ばしたレイとマップ)
 		D3DXIntersect(map->MeshMap, &enemyWk[no].status.pos, &D3DXVECTOR3(1, 0, 0), &enemyWk[no].status.tomapRight, NULL, NULL, NULL,
@@ -529,14 +535,30 @@ void move_change(void)
 		// 右方向接触
 		if (enemyWk[no].status.R_RtoMdistance <= ENEMY_HANKEI)
 		{
-			// 左
-			enemyWk[no].status.rot.y = HIDARI;
+			if (enemyWk[no].status.pos.z < 0)
+			{
+				enemyWk[no].status.rot.y = UE;
+			}
+			else
+			{
+				// 右
+				enemyWk[no].status.rot.y = SHITA;
+			}
 		}
 
 		// 左接触
 		else if (enemyWk[no].status.L_RtoMdistance <= ENEMY_HANKEI)
-		{	// 右
-			enemyWk[no].status.rot.y = MIGI;
+		{	
+			if (enemyWk[no].status.pos.z < 0)
+			{
+				enemyWk[no].status.rot.y = UE;
+			}
+			else
+			{
+				// 右
+				enemyWk[no].status.rot.y = SHITA;
+			}
+
 		}
 
 		// shita接触
@@ -550,17 +572,12 @@ void move_change(void)
 			enemyWk[no].status.rot.y = SHITA;
 		}
 
+
+		// 巡回の試験官のみ変更
+
+		// 2人目(no=1)
+
 	}
-	/// もしジャンプなどを実装する際に
-	/// 地面へのめり込みを回避
-//if (model->D_RtoMdistance <= model->center)
-//{
-//	hosei.y = model->center - model->D_RtoMdistance;
-//	model->pos.y += hosei.y;
-//}
-
-
-
-
-//	model->move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 }
+
+

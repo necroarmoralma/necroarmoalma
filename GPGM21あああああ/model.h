@@ -31,8 +31,9 @@
 // Å‘åHP
 #define PLAYER_HP_MAX	(1000.0f)
 
-#define	PITCH_MODEL		"data/MODELFILE/PLAYER/pitch.x"
-#define	VALUE_MOVE_MODEL	(1.80f)						// ˆÚ“®‘¬“x
+#define	PITCH_MODEL		"data/MODEL/player.x"
+
+#define	VALUE_MOVE_MODEL	(0.80f)						// ˆÚ“®‘¬“x
 #define	RATE_MOVE_MODEL		(0.20f)						// ˆÚ“®Šµ«ŒW”
 #define	VALUE_ROTATE_MODEL	(D3DX_PI * 0.05f)			// ‰ñ“]‘¬“x
 #define	RATE_ROTATE_MODEL	(0.20f)						// ‰ñ“]Šµ«ŒW”

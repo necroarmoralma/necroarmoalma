@@ -28,6 +28,10 @@
 #define BULLETMK2BASESIZE (15.0f)		//　基本的にXもYも同じサイズ
 //#define BULLETMK2BASESIZEY 
 
+
+//　壁との距離判定用、半径そのままだとめりこむので超するための値
+#define LONGHOSEI	(0.0f)
+
 // プレイヤーのパーツ数
 //*****************************************************************************
 // プロトタイプ宣言
@@ -79,7 +83,7 @@ HRESULT InitModel(int gametypeno)
 	model->status.BuffMatModel = NULL;
 
 	// 初期位置及びステータスの設定(boolの設定もここで)
-	model->pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);					// 微調整
+	model->pos = D3DXVECTOR3(8.0f, 0.0f, 55.6555443f);					// 微調整
 	model->move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	model->puremove = model->move;
 	model->rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
@@ -124,8 +128,13 @@ HRESULT InitModel(int gametypeno)
 	//g_colShadow = D3DXCOLOR(0.5f, 0.5f, 0.5f, 0.5f);
 
 	//// model_longcheckで取得した半径だけ上昇させる
-	model->pos.y += model->center;
+	//model->pos.y += model->center;
 
+
+	
+		// あとで消す
+		// モデルセンターちょうせい
+		//model->center += LONGHOSEI;
 	return S_OK;
 }
 
@@ -286,6 +295,7 @@ void UpdateModel(int movetypeno)
 		model->pos.y += model->move.y;
 		model->pos.z += model->move.z;
 
+	
 
 		// 慣性かける前に移動量を保存
 		model->puremove = model->move;
@@ -394,7 +404,7 @@ void DrawModel(int gametypeno)
 
 
 	// 回転を反映
-	D3DXMatrixRotationYawPitchRoll(&mtxRot, model->rot.y, model->rot.x, model->rot.z);
+	D3DXMatrixRotationYawPitchRoll(&mtxRot, model->rot.y, model->rot.x+ MODEL_MOVEROLlX, model->rot.z);
 	D3DXMatrixMultiply(&model->World, &model->World, &mtxRot);
 
 	// 移動を反映
@@ -485,7 +495,7 @@ void model_RaypickTomap(void)
 		// 下へ飛ばす
 		D3DXIntersect(
 			map->MeshMap,				// 当たり判定を取りたいメッシュ　型はLPD3DXBASEMESH(LPD3DXMESHもOK?)
-			&D3DXVECTOR3(model->pos.x, model->pos.y + 0.0f, model->pos.z),				// レイの視点座標を設定(プレイヤーの座標とかね) 型はD3DXVECTOR3
+			&D3DXVECTOR3(model->pos.x, model->pos.y + 0.0f, model->pos.z),				// レイの視点座標を設定(プレイヤーの座標とか) 型はD3DXVECTOR3
 			&D3DXVECTOR3(0, -1, 0),		// レイの方向を設定 型はD3DXVECTOR3 XYZ 1で正方向-1で負の方向
 			&model->tomapDown,				// 衝突判定 型はBOOL(boolではない) 衝突していたらTRUE当たっていなければFALSE
 			NULL,						// 上記の判定がTRUEの場合レイの視点に最も近い面のインデックス値へのポインタ
@@ -532,6 +542,7 @@ void escapefromwall(void)
 	D3DXVECTOR3 hosei;
 	D3DXVECTOR3 rotCamera;
 	float		escapmodellmove = 1.0f;		// 値を補正させるため
+	float		hoseichi;					// 補正値こみの半径
 	// カメラの向き取得
 	rotCamera = GetRotCamera();
 
@@ -542,6 +553,9 @@ void escapefromwall(void)
 	//controlcount = NOCONTROL;
 	//model->control = false;
 
+
+	// 補正値をたす
+	hoseichi = model->center + LONGHOSEI;
 	// テスト壁にそってとめてしまう
 	// 壁とのレイを半径にすればいい
 	// レイが半径以下になっている場合半径になるよう移動させてあげればいい
@@ -575,8 +589,8 @@ void escapefromwall(void)
 
 	if (model->D_RtoMdistance <= model->center)
 	{
-		hosei.y = model->center - model->D_RtoMdistance;
-		model->pos.y += hosei.y;
+	//	hosei.y = model->center - model->D_RtoMdistance;
+	//	model->pos.y += hosei.y;
 	}
 
 
@@ -884,6 +898,8 @@ void keyboardmove(void)
 					{
 						model->rot.z = -MODEL_MOVEROLL;
 					}
+
+					model->rot.y = 1.57f;		// 左
 					//model->rotDest.y = rotCamera.y + D3DX_PI * 0.50f;
 					roton = true;
 				}
@@ -936,6 +952,7 @@ void keyboardmove(void)
 						model->rot.z = MODEL_MOVEROLL;
 					}
 
+					model->rot.y = -1.57f;			// 右
 					//model->rotDest.y = rotCamera.y - D3DX_PI * 0.50f;
 					roton = true;
 				}
@@ -949,6 +966,8 @@ void keyboardmove(void)
 				{
 					model->rot.x = -MODEL_MOVEROLlX;
 				}
+
+				model->rot.y = 3.14f;
 
 				//model->rotDest.y = rotCamera.y + D3DX_PI;
 				roton = true;
@@ -964,6 +983,7 @@ void keyboardmove(void)
 					model->rot.x = MODEL_MOVEROLlX;
 				}
 				//model->rotDest.y = rotCamera.y ;
+				model->rot.y = 0.0f;
 				roton = true;
 			}
 		}

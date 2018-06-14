@@ -36,6 +36,7 @@ HRESULT InitLight(void)
 		// ライトのタイプの設定
 		LightWk[no].Lightstatus.Type = D3DLIGHT_DIRECTIONAL;
 
+
 		// 拡散光
 		LightWk[no].Lightstatus.Diffuse = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 

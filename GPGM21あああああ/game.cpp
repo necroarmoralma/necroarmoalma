@@ -290,43 +290,21 @@ void UpdateGame(void)
 		UpdateShadow();
 
 
-
-		//// ユニットの更新
-		//UpdateUnit();
-		//
-		// ボスバレットの更新
-		UpdateBossbullet();
-
 		// モデルの更新
 		UpdateModel(model_game);
-		//UpdateModelArm();
-		UpdateModelBooster();
 		UpdateWheel(model_game);
 
-
-		// 弾の更新
-		UpdateBulletmk2();
 
 		// ウィンドウ更新
 		UpdateEnemyinfo();
 		// ライフの更新
 		UpdateModellife();
 
-		// スチーム
-		UpdateSteam();
-
-		// HIT
-		UpdateHit();
-
-
-
 		// 敵の更新
 		UpdateEnemyall();
 
-		// ターゲットサークル更新
-		UpdateLockcircle(model_game);
-		// マップの更新
-		UpdateMap();
+		//UpdateBoss();
+
 		// スコア更新
 		UpdateScore();
 
@@ -371,19 +349,13 @@ void DrawGame(void)
 
 
 
-	// マップ描画
-	DrawMap();
 
-	// 壁処理の描画
-	///DrawMeshWall();
 
 	// モデル処理の描画
 	DrawModel(model_game);
 	DrawWheel();
 	DrawLockcircle();
 
-	// ユニットの描画
-	//DrawUnit();
 
 	// 敵の描画
 	DrawEnemyall();
@@ -392,9 +364,7 @@ void DrawGame(void)
 	/////****************
 	//// ボス
 	////*****************
-	//DrawBoss();
-	//DrawBossarml();
-	//DrawBossarmr();
+	DrawBoss();
 
 
 
@@ -423,8 +393,8 @@ void DrawGame(void)
 	// エネミー情報描画
 	//DrawEnemyinfo();
 	// 情報ウインドウ描画
-	DrawModellife();
-	DrawBosslife();
+	//DrawModellife();
+	//DrawBosslife();
 	//DrawModelevolve();
 
 
@@ -432,15 +402,17 @@ void DrawGame(void)
 	// スコア描画
 	DrawScore();
 
-	// スチーム描画
-	//DrawSteam();
-
 	if (pause == true)
 	{
 		DrawPause();
 
 
 	}
+
+
+
+	// マップ描画
+	DrawMap();
 
 	if (check == true)
 	{

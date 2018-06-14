@@ -16,7 +16,7 @@
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
-#define	BOSS_AIRPLANE		"data/MODEL/suikanopod.x"	// 読み込むモデル名
+#define	BOSS_AIRPLANE		"data/MODEL/student.x"	// 読み込むモデル名
 #define	VALUE_MOVE_BOSS	(0.80f)						// 移動速度
 #define	RATE_MOVE_BOSS		(0.20f)						// 移動慣性係数
 #define	VALUE_ROTATE_BOSS	(D3DX_PI * 0.05f)			// 回転速度
@@ -193,57 +193,6 @@ void UpdateBoss(void)
 	boss->acttime -= 1.0f;		//　デクリメントでいいかも？1フレームで1減らしたい
 
 
-	// movemodeによって撃つ弾がかわる
-	// SetBossbulletの引数は(ボスの現在座標,弾の横の大きさ,弾の縦の大きさ,弾の色(RGBA),弾の角度)です
-	// DEBIRUの場合
-	if (boss->movemode == DEBIRU)
-	{
-		if (boss->acttime <= 0.0f)
-		{	// 0なら実行
-		//	bossshot();
-			SetBossbullet(boss->pos, DEBIRUBULLET_1_SIZE_X, DEBIRUBULLET_1_SIZE_Y, D3DXCOLOR(1.0f, 0.7f, 0.8f, 0.75f), boss->rockon);
-			boss->acttime = BOSSACT;
-		}
-		//bossbeam();
-	}
-
-	// AHIRUの場合
-	if (boss->movemode == AHIRU)
-	{
-		if (boss->acttime <= 0.0f)
-		{
-			SetBossbullet(boss->pos, AHIRUBULLET_1_SIZE_X,AHIRUBULLET_1_SIZE_Y, D3DXCOLOR(1.0f, 0.7f, 0.8f, 0.75f), boss->rockon - 0.75f);
-			SetBossbullet(boss->pos, AHIRUBULLET_2_SIZE_X,AHIRUBULLET_2_SIZE_Y, D3DXCOLOR(1.0f, 0.7f, 0.8f, 0.75f), boss->rockon - 1.5f);
-			SetBossbullet(boss->pos, AHIRUBULLET_3_SIZE_X,AHIRUBULLET_3_SIZE_Y, D3DXCOLOR(1.0f, 0.7f, 0.8f, 0.75f), boss->rockon);
-			boss->acttime = BOSSACT;
-		}
-	}
-
-	// HENANOの場合
-	if (boss->movemode == HENANO)
-	{
-		if (boss->acttime <= 0.0f)
-		{
-			SetBossbullet(D3DXVECTOR3(boss->pos.x,model->pos.y,boss->pos.z), 100.0f, 10.0f, D3DXCOLOR(0.80f, 1.0f, 0.8f, 0.75f), boss->rockon);
-			SetBossbullet(boss->pos, 50.00f, 10.0f, D3DXCOLOR(0.8f, 1.0f, 0.8f, 0.75f), boss->rockon - 1.5f);
-			SetBossbullet(boss->pos, 100.0f, 10.0f, D3DXCOLOR(0.8f, 1.0f, 0.8f, 0.75f), boss->rockon);
-			boss->acttime = BOSSACT;
-		}
-	}
-
-	// MEKAの場合
-	if (boss->movemode == MEKA)
-	{
-		SetBossbullet(boss->pos, 10.0f, 10.0f, D3DXCOLOR(1.0f, 1.0f, 0.8f, 0.75f), boss->rockon);
-		boss->acttime = BOSSACT;
-	}
-
-
-	boss->kaiten += BOSSKAITENSPEED;
-	if (boss->kaiten > -D3DX_PI)
-	{
-		boss->kaiten -= D3DX_PI * 2.0f;
-	}
 	
 		//boss->pos.x =   (sinf(boss->kaiten) * BOSSSPEED *BOSSLENGTH);				// ここの31.5fとかはえんしゅうみたいね
 		////boss->pos.y = model->pos.y;
@@ -258,6 +207,7 @@ void UpdateBoss(void)
 	SetColorShadow(bossnidxShadow, bosscolShadow);
 
 	PrintDebugProc("[rotDest.yいくつ:(%f) ]\n", boss->rotDest.y);
+
 
 	//回転テスト
 	boss->rot.y += 0.01f;

@@ -9,6 +9,7 @@
 
 #include "main.h"
 #include "setting.h"
+#include "ai.h"
 
 //*****************************************************************************
 // マクロ定義
@@ -36,6 +37,24 @@
 #define ENEMYLIFE		(450)	// てきのHP
 #define ENEMYKAITENSPEED	(D3DX_PI * 0.0002f)
 #define ENEMYKAITENHANKEI	(450.0f)
+
+
+// 歪用
+#define SHIKENKAN_NINZU			(3)			// 試験管の人数
+#define JYUNKAI					(1)			// 巡回する試験管の番号その１
+
+// 試験管の座標
+#define SHIKENKANPOS1		D3DXVECTOR3(-120.0f,0.0f,100.0f)
+#define SHIKENKANPOS2		D3DXVECTOR3(40.0f, 0.0f, 100.0f)	
+#define SHIKENKANPOS3		D3DXVECTOR3(120.0f,0.0f,100.0f)
+
+
+// 方向転換(指定に使う
+#define	HIDARI	(1.57f)
+#define	MIGI	(-1.57f)
+#define	UE		(0.0f)
+#define	SHITA	(3.14f)
+
 //*****************************************************************************
 // 構造体定義
 //*****************************************************************************
@@ -61,7 +80,12 @@ typedef struct
 	//	歪用
 	bool			warning;		// 警戒中かどうか
 	bool			muki;			// 今向いている向きだよ
-									//float
+	bool			modechange;		// 今モード移行中かどうか(巡回位置に戻っているかどうか
+
+	D3DXVECTOR3		start_pos;		// 初期位置
+									
+									
+	//float
 } ENEMY;
 
 typedef enum

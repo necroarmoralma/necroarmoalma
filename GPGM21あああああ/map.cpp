@@ -14,7 +14,7 @@
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
-#define MAP_NIJI			"data/MODEL/ibitsufield.x"
+#define MAP_SCHOOL "data/STAGE/stage0613.x"
 
 //*****************************************************************************
 // プロトタイプ宣言
@@ -68,7 +68,7 @@ HRESULT InitMap(void)
 	
 
 	// Xファイルの読み込み
-	if (FAILED(D3DXLoadMeshFromX(MAP_NIJI,
+	if (FAILED(D3DXLoadMeshFromX(MAP_SCHOOL,
 		D3DXMESH_SYSTEMMEM,
 		pDevice,
 		NULL,

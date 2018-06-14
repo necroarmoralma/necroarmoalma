@@ -150,6 +150,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AI.cpp" />
     <ClCompile Include="boss.cpp" />
     <ClCompile Include="bossbullet.cpp" />
     <ClCompile Include="bosslife.cpp" />
@@ -194,6 +195,7 @@
     <ClCompile Include="wheel.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AI.h" />
     <ClInclude Include="boss.h" />
     <ClInclude Include="bossbullet.h" />
     <ClInclude Include="bosslife.h" />
